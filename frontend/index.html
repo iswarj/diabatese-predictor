@@ -50,7 +50,7 @@
         <label for="diabetes_pedigree">
             Family History / Genetic Risk Score:
             <span
-                title="This is a numerical score representing diabetes-related family history used by the machine learning model.">ⓘ</span>
+                title="This is a numerical score representing diabetes-related family history used by the machine learning model."></span>
         </label>
         <input type="number" id="diabetes_pedigree" step="0.001" min="0">
 
@@ -76,34 +76,63 @@
         // ==============================
 
         const generateButton = document.getElementById("generate-btn");
-
         generateButton.addEventListener("click", function () {
+        // Randomly choose one of three realistic sample profiles
+        const profile = Math.floor(Math.random() * 3);
 
-            document.getElementById("pregnancies").value =
-                Math.floor(Math.random() * 16);
+        let pregnancies;
+        let glucose;
+        let bloodPressure;
+        let skinThickness;
+        let insulin;
+        let bmi;
+        let diabetesPedigree;
+        let age;
 
-            document.getElementById("glucose").value =
-                Math.floor(Math.random() * (200 - 70 + 1)) + 70;
+        if (profile === 0) {
+            // Lower-risk profile
+            pregnancies = Math.floor(Math.random() * 3); // 0–2
+            glucose = Math.floor(Math.random() * (110 - 75 + 1)) + 75;
+            bloodPressure = Math.floor(Math.random() * (85 - 60 + 1)) + 60;
+            skinThickness = Math.floor(Math.random() * (30 - 12 + 1)) + 12;
+            insulin = Math.floor(Math.random() * (150 - 20 + 1)) + 20;
+            bmi = (Math.random() * (27 - 18.5) + 18.5).toFixed(1);
+            diabetesPedigree = (Math.random() * (0.5 - 0.1) + 0.1).toFixed(3);
+            age = Math.floor(Math.random() * (45 - 18 + 1)) + 18;
 
-            document.getElementById("blood_pressure").value =
-                Math.floor(Math.random() * (120 - 50 + 1)) + 50;
+        } else if (profile === 1) {
+            // Moderate-risk profile
+            pregnancies = Math.floor(Math.random() * 5); // 0–4
+            glucose = Math.floor(Math.random() * (145 - 100 + 1)) + 100;
+            bloodPressure = Math.floor(Math.random() * (100 - 70 + 1)) + 70;
+            skinThickness = Math.floor(Math.random() * (40 - 15 + 1)) + 15;
+            insulin = Math.floor(Math.random() * (220 - 30 + 1)) + 30;
+            bmi = (Math.random() * (33 - 24) + 24).toFixed(1);
+            diabetesPedigree = (Math.random() * (0.8 - 0.2) + 0.2).toFixed(3);
+            age = Math.floor(Math.random() * (60 - 30 + 1)) + 30;
 
-            document.getElementById("skin_thickness").value =
-                Math.floor(Math.random() * (60 - 10 + 1)) + 10;
+        } else {
+            // Higher-risk profile
+            pregnancies = Math.floor(Math.random() * 7); // 0–6
+            glucose = Math.floor(Math.random() * (190 - 125 + 1)) + 125;
+            bloodPressure = Math.floor(Math.random() * (115 - 75 + 1)) + 75;
+            skinThickness = Math.floor(Math.random() * (50 - 20 + 1)) + 20;
+            insulin = Math.floor(Math.random() * (300 - 50 + 1)) + 50;
+            bmi = (Math.random() * (40 - 28) + 28).toFixed(1);
+            diabetesPedigree = (Math.random() * (1.0 - 0.4) + 0.4).toFixed(3);
+            age = Math.floor(Math.random() * (75 - 40 + 1)) + 40;
+        }
 
-            document.getElementById("insulin").value =
-                Math.floor(Math.random() * 401);
-
-            document.getElementById("bmi").value =
-                (Math.random() * (50 - 18) + 18).toFixed(1);
-
-            document.getElementById("diabetes_pedigree").value =
-                (Math.random() * (2.0 - 0.1) + 0.1).toFixed(3);
-
-            document.getElementById("age").value =
-                Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-        });
-
+        // Put generated values into the form
+        document.getElementById("pregnancies").value = pregnancies;
+        document.getElementById("glucose").value = glucose;
+        document.getElementById("blood_pressure").value = bloodPressure;
+        document.getElementById("skin_thickness").value = skinThickness;
+        document.getElementById("insulin").value = insulin;
+        document.getElementById("bmi").value = bmi;
+        document.getElementById("diabetes_pedigree").value = diabetesPedigree;
+        document.getElementById("age").value = age;
+    });
 
         // ==============================
         // Send Prediction Request
