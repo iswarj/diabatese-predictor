@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Predictor</title>
+    <meta name="description"
+        content="AI-powered diabetes risk predictor using Logistic Regression, KNN, and Random Forest models.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Diabetes Predictor</h1>
+    <p>Enter your health information to get predictions from three machine learning models.</p>
+    <button type="button" id="generate-btn">
+        🎲 Generate Sample Data
+    </button>
+
+    <form id="prediction-form">
+
+        <label for="pregnancies">Pregnancies:</label>
+        <input type="number" id="pregnancies" min="0">
+        <br><br>
+
+        <label for="glucose">Glucose:</label>
+        <input type="number" id="glucose" min="0">
+        <br><br>
+
+        <label for="blood_pressure">Blood Pressure:</label>
+        <input type="number" id="blood_pressure" min="0">
+        <br><br>
+
+        <label for="skin_thickness">Skin Thickness:</label>
+        <input type="number" id="skin_thickness" min="0">
+        <br><br>
+
+        <label for="insulin">Insulin:</label>
+        <input type="number" id="insulin" min="0">
+        <br><br>
+
+        <label for="bmi">BMI:</label>
+        <input type="number" id="bmi" step="0.1" min="0">
+        <br><br>
+
+        <label for="diabetes_pedigree">
+            Family History / Genetic Risk Score:
+            <span
+                title="This is a numerical score representing diabetes-related family history used by the machine learning model.">ⓘ</span>
+        </label>
+        <input type="number" id="diabetes_pedigree" step="0.001" min="0">
+
+        <br><br>
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" min="1">
+        <br><br>
+
+        <button type="submit" id="predict-btn">
+            Predict
+        </button>
+
+    </form>
+    <hr>
+    <h2>Prediction Results</h2>
+    <div id="results">
+        <p>Submit your information to see the results.</p>
+    </div>
+    <script>
+        // ==============================
+        // Generate Sample Data
+        // ==============================
+
+        const generateButton = document.getElementById("generate-btn");
+
+        generateButton.addEventListener("click", function () {
+
+            document.getElementById("pregnancies").value =
+                Math.floor(Math.random() * 16);
+
+            document.getElementById("glucose").value =
+                Math.floor(Math.random() * (200 - 70 + 1)) + 70;
+
+            document.getElementById("blood_pressure").value =
+                Math.floor(Math.random() * (120 - 50 + 1)) + 50;
+
+            document.getElementById("skin_thickness").value =
+                Math.floor(Math.random() * (60 - 10 + 1)) + 10;
+
+            document.getElementById("insulin").value =
+                Math.floor(Math.random() * 401);
+
+            document.getElementById("bmi").value =
+                (Math.random() * (50 - 18) + 18).toFixed(1);
+
+            document.getElementById("diabetes_pedigree").value =
+                (Math.random() * (2.0 - 0.1) + 0.1).toFixed(3);
+
+            document.getElementById("age").value =
+                Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+        });
+
+
+        // ==============================
+        // Send Prediction Request
+        // ==============================
+
+        const form = document.getElementById("prediction-form");
+        const predictBtn = document.getElementById("predict-btn");
+
+        // Helper function to visually distinguish Diabetic vs Not Diabetic
+        function getResultBadge(value) {
+            const valStr = String(value).trim();
+            if (valStr === "1" || valStr.toLowerCase() === "diabetic") {
+                return '<span class="result-badge diabetic">Diabetic</span>';
+            } else if (valStr === "0" || valStr.toLowerCase() === "not diabetic") {
+                return '<span class="result-badge not-diabetic">Not Diabetic</span>';
+            }
+            return `<span class="result-badge neutral">${value}</span>`;
+        }
+
+        form.addEventListener("submit", async function (event) {
+
+            // Prevent the page from refreshing
+            event.preventDefault();
+
+            // Collect values from the form
+            const inputData = {
+                pregnancies: Number(document.getElementById("pregnancies").value),
+                glucose: Number(document.getElementById("glucose").value),
+                blood_pressure: Number(document.getElementById("blood_pressure").value),
+                skin_thickness: Number(document.getElementById("skin_thickness").value),
+                insulin: Number(document.getElementById("insulin").value),
+                bmi: Number(document.getElementById("bmi").value),
+                diabetes_pedigree: Number(document.getElementById("diabetes_pedigree").value),
+                age: Number(document.getElementById("age").value)
+            };
+
+            console.log("Sending data:", inputData);
+
+            // Set loading state
+            predictBtn.disabled = true;
+            predictBtn.innerText = "Predicting...";
+
+            try {
+
+                const response = await fetch(
+                    "http://127.0.0.1:8000/predict",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify(inputData)
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log("API Response:", result);
+                const resultsDiv = document.getElementById("results");
+                resultsDiv.innerHTML = `
+                    <h3>Predictions</h3>
+                    <p>
+                        <strong>Logistic Regression:</strong>
+                        ${getResultBadge(result.predictions.LogisticRegression)}
+                    </p>
+                    <p>
+                        <strong>KNN:</strong>
+                        ${getResultBadge(result.predictions.KNN)}
+                    </p>
+                    <p>
+                        <strong>Random Forest:</strong>
+                        ${getResultBadge(result.predictions.RandomForest)}
+                    </p>
+                `;
+            } catch (error) {
+                console.error("Error:", error);
+                const resultsDiv = document.getElementById("results");
+                resultsDiv.innerHTML = `<p class="error-msg">⚠️ Unable to connect to the prediction server. Please try again.</p>`;
+            } finally {
+                // Restore button state
+                predictBtn.disabled = false;
+                predictBtn.innerText = "Predict";
+            }
+
+        });
+    </script>
+    <p class="disclaimer">Disclaimer: This tool is for educational purposes only and is not a medical diagnosis.</p>
+
+    <div class="social-links">
+
+        <a href="https://github.com/iswarj/diabatese-predictor" target="_blank">
+            GitHub
+        </a>
+
+        <a href="https://www.linkedin.com/in/iswarj/" target="_blank">
+            LinkedIn
+        </a>
+
+    </div>
+</body>
+
+</html>

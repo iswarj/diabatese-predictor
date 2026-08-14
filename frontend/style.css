@@ -1,0 +1,291 @@
+/* =========================================================
+   Diabetes Predictor — Clean Light UI (SlothUI Inspired)
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-main: #fcfcfd;
+  --bg-card: #ffffff;
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --border-color: #e5e7eb;
+  --border-focus: #d1d5db;
+  --primary-color: #111827;
+  --radius-pill: 9999px;
+  --radius-lg: 24px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  margin: 0;
+  padding: 24px 20px;
+  line-height: 1.6;
+}
+
+/* Center Content Area */
+h1, body > p, button#generate-btn, form#prediction-form, hr, h2, div#results, .social-links {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Headers & Text */
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+
+body > p {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin-top: 0;
+  margin-bottom: 40px;
+}
+
+/* Generate Button */
+button#generate-btn {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto 32px auto;
+  align-items: center;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+button#generate-btn:hover {
+  background-color: #f9fafb;
+  border-color: var(--border-focus);
+}
+
+/* Form Container */
+form#prediction-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+form#prediction-form br {
+  display: none;
+}
+
+/* Form Fields */
+form#prediction-form label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+form#prediction-form label:first-of-type {
+  margin-top: 0;
+}
+
+form#prediction-form input[type="number"] {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  background-color: var(--bg-card);
+  font-size: 14px;
+  color: var(--text-main);
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+form#prediction-form input[type="number"]:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 4px #f3f4f6;
+}
+
+form#prediction-form input[type="number"]::-webkit-outer-spin-button,
+form#prediction-form input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+form#prediction-form input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+form#prediction-form label span[title] {
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: help;
+  background: #f3f4f6;
+  padding: 2px 8px;
+  border-radius: 12px;
+  vertical-align: middle;
+}
+
+form#prediction-form button[type="submit"] {
+  display: block;
+  width: auto;
+  margin-top: 32px;
+  padding: 12px 28px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+form#prediction-form button[type="submit"]:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+form#prediction-form button[type="submit"]:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background-color: var(--text-muted);
+}
+
+/* Divider */
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 40px auto;
+}
+
+/* Results Section */
+h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-main);
+  text-align: center;
+}
+
+div#results {
+  background: var(--bg-card);
+  border: 1px dashed var(--border-focus);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  margin-bottom: 60px;
+  text-align: center;
+  color: var(--text-main);
+}
+
+div#results > p:first-child {
+  color: var(--text-muted);
+  margin: 0;
+  font-size: 14px;
+}
+
+div#results h3 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: left;
+}
+
+div#results p {
+  text-align: left;
+  background: #f9fafb;
+  border: 1px solid var(--border-color);
+  padding: 16px 24px;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: var(--text-main);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+div#results p strong {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* Social Links - Kept at bottom */
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding-top: 20px;
+}
+
+.social-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.social-links a:hover {
+  color: var(--text-main);
+}
+
+/* Result Badges */
+.result-badge {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+}
+.result-badge.diabetic {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.result-badge.not-diabetic {
+  background: #d1fae5;
+  color: #065f46;
+}
+.result-badge.neutral {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* Error Message */
+.error-msg {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #f87171;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 500;
+  width: 100%;
+}
+
+/* Disclaimer */
+.disclaimer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0 auto;
+  max-width: 600px;
+}
